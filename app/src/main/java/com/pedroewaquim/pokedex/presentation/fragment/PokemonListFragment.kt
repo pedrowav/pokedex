@@ -9,16 +9,16 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView.SCROLL_STATE_IDLE
 import com.pedroewaquim.pokedex.R
 import com.pedroewaquim.pokedex.infrastructure.factory.ViewModelsFactory
+import com.pedroewaquim.pokedex.presentation.PokedexState
 import com.pedroewaquim.pokedex.presentation.fragment.adapter.PokemonAdapter
 import kotlinx.coroutines.launch
 
 class PokemonListFragment : Fragment() {
-    private var columnCount = 1
     private lateinit var pokemonAdapter: PokemonAdapter
 
     private val viewModel: PokemonListViewModel by viewModels {
@@ -27,7 +27,6 @@ class PokemonListFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        getFragmentArguments()
         createViewModel()
     }
 
@@ -43,12 +42,6 @@ class PokemonListFragment : Fragment() {
         return recyclerView
     }
 
-    private fun getFragmentArguments() {
-        arguments?.let {
-            columnCount = it.getInt(ARG_COLUMN_COUNT)
-        }
-    }
-
     private fun createViewModel() {
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
@@ -58,8 +51,10 @@ class PokemonListFragment : Fragment() {
     }
 
     private suspend fun onChangePokemon(viewModel: PokemonListViewModel) {
-        viewModel.pokedexState.collect { pokemonList ->
-            pokemonAdapter.submitList(pokemonList)
+        viewModel.pokedexState.collect { pokedexState ->
+            when (pokedexState) {
+                is PokedexState.Success -> pokemonAdapter.submitList(pokedexState.pokemonList)
+            }
         }
     }
 
@@ -67,25 +62,29 @@ class PokemonListFragment : Fragment() {
         recyclerView: RecyclerView
     ) {
         with(recyclerView) {
-            layoutManager = when {
-                columnCount <= 1 -> LinearLayoutManager(context)
-                else -> GridLayoutManager(context, columnCount)
-            }
+            layoutManager = LinearLayoutManager(context)
             pokemonAdapter = PokemonAdapter(emptyList())
             adapter = pokemonAdapter
             setHasFixedSize(true)
+            addOnScrollListener(getScrollListener(layoutManager as LinearLayoutManager))
+        }
+    }
+
+    private fun getScrollListener(layoutManager: LinearLayoutManager): RecyclerView.OnScrollListener {
+        return object : RecyclerView.OnScrollListener() {
+            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                super.onScrollStateChanged(recyclerView, newState)
+                if (newState == SCROLL_STATE_IDLE) {
+                    val lastViewPosition = layoutManager.findLastVisibleItemPosition()
+                    viewModel.onLastItemView(lastViewPosition)
+                }
+            }
         }
     }
 
     companion object {
-        const val ARG_COLUMN_COUNT = "column-count"
-
         @JvmStatic
-        fun newInstance(columnCount: Int) =
-            PokemonListFragment().apply {
-                arguments = Bundle().apply {
-                    putInt(ARG_COLUMN_COUNT, columnCount)
-                }
-            }
+        fun newInstance() =
+            PokemonListFragment()
     }
 }

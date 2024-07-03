@@ -9,10 +9,9 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class GetPokemon(private val service: PokemonApiService) {
-    private var offset: Int = 0
+class GetPokemonList(private val service: PokemonApiService) {
 
-    operator fun invoke(pokemonCallback: PokemonListCallback) {
+    operator fun invoke(pokemonCallback: PokemonListCallback, offset: Int = 0) {
         service.getAllPokemon(PAGINATION, offset).enqueue(createCallback(pokemonCallback))
     }
 
@@ -42,6 +41,6 @@ class GetPokemon(private val service: PokemonApiService) {
     }
 
     companion object {
-        const val PAGINATION: Int = 10
+        const val PAGINATION: Int = 20
     }
 }

@@ -21,7 +21,7 @@ class MainActivity : AppCompatActivity() {
             insets
         }
 
-        val fragment = PokemonListFragment.newInstance(1)
+        val fragment = PokemonListFragment.newInstance()
         supportFragmentManager.beginTransaction().replace(R.id.fragment_container, fragment)
             .commit()
     }
