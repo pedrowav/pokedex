@@ -17,22 +17,25 @@ class PokemonListViewModel(
     val pokedexState: StateFlow<PokedexState> = _pokedexState.asStateFlow()
 
     private val _pokemonList: MutableList<Pokemon> = mutableListOf()
+    private var _alreadyRequested = false
 
-    fun getPokemonList() {
-        getPokemonListAction(this)
-    }
-
-    fun onLastItemView(lastItemPos: Int) {
+    fun getMorePokemonsIfNeeded(lastItemPos: Int = -1) {
         if (shouldRequestMorePokemons(lastItemPos)) {
+            _alreadyRequested = true
             getPokemonListAction(this@PokemonListViewModel, offset = _pokemonList.size)
         }
     }
 
     private fun shouldRequestMorePokemons(lastItemPos: Int): Boolean =
-        _pokemonList.size - 3 <= lastItemPos + 1
+        _pokemonList.size - 3 <= lastItemPos + 1 && !_alreadyRequested
 
-    override fun invoke(values: List<Pokemon>) {
+    override fun success(values: List<Pokemon>) {
+        _alreadyRequested = false
         _pokemonList.addAll(values)
         _pokedexState.value = PokedexState.Success(_pokemonList.toList())
+    }
+
+    override fun error() {
+        _alreadyRequested = false
     }
 }

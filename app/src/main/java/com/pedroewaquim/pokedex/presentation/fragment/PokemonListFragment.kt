@@ -38,7 +38,7 @@ class PokemonListFragment : Fragment() {
             inflater.inflate(R.layout.fragment_pokemon_list, container, false) as RecyclerView
 
         setRecyclerViewConfig(recyclerView)
-        viewModel.getPokemonList()
+        viewModel.getMorePokemonsIfNeeded()
         return recyclerView
     }
 
@@ -76,7 +76,7 @@ class PokemonListFragment : Fragment() {
                 super.onScrollStateChanged(recyclerView, newState)
                 if (newState == SCROLL_STATE_IDLE) {
                     val lastViewPosition = layoutManager.findLastVisibleItemPosition()
-                    viewModel.onLastItemView(lastViewPosition)
+                    viewModel.getMorePokemonsIfNeeded(lastViewPosition)
                 }
             }
         }
