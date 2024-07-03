@@ -1,6 +1,7 @@
 package com.pedroewaquim.pokedex.core.action
 
 import android.util.Log
+import com.pedroewaquim.pokedex.Extensions.capitalize
 import com.pedroewaquim.pokedex.core.callback.PokemonListCallback
 import com.pedroewaquim.pokedex.core.domain.Pokemon
 import com.pedroewaquim.pokedex.core.response.PokemonListResponse
@@ -30,7 +31,7 @@ class GetPokemonList(
 
         CoroutineScope(Dispatchers.IO).launch {
             val results = response.body()?.results ?: emptyList()
-            val pokemonList: List<Pokemon> = mapTo(results)
+            val pokemonList: List<Pokemon> = mapToPokemonList(results)
             _callback.success(pokemonList)
         }
 
@@ -48,7 +49,7 @@ class GetPokemonList(
         return number
     }
 
-    private fun mapTo(oneShotList: List<PokemonListResponse.PokemonOneShotResponse>): List<Pokemon> {
+    private fun mapToPokemonList(oneShotList: List<PokemonListResponse.PokemonOneShotResponse>): List<Pokemon> {
         return oneShotList.map { oneShot ->
             val pokemonNumber = getPokemonNumberFromUrl(oneShot.url)
             val response = service.getPokemon(pokemonNumber).execute()
@@ -56,12 +57,12 @@ class GetPokemonList(
             if (response.isSuccessful) {
                 val pokemon = response.body()!!
                 Pokemon(
-                    pokemon.id,
-                    oneShot.name.replaceFirstChar { first -> first.titlecase() },
+                    pokemon.id.toString(),
+                    oneShot.name.capitalize(),
                     pokemon.sprites.default
                 )
             } else {
-                Pokemon(1, oneShot.name.replaceFirstChar { first -> first.titlecase() })
+                Pokemon("?", oneShot.name.capitalize())
             }
         }
     }
