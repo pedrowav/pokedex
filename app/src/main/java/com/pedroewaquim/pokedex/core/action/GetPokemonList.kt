@@ -17,10 +17,10 @@ class GetPokemonList(
     private val service: PokemonApiService
 ) : Callback<PokemonListResponse> {
 
-    private lateinit var _callback: PokemonListCallback
+    private lateinit var callback: PokemonListCallback
 
     operator fun invoke(callback: PokemonListCallback, offset: Int = 0) {
-        _callback = callback
+        this.callback = callback
         service.getAllPokemon(PAGINATION, offset).enqueue(this)
     }
 
@@ -32,14 +32,14 @@ class GetPokemonList(
         CoroutineScope(Dispatchers.IO).launch {
             val results = response.body()?.results ?: emptyList()
             val pokemonList: List<Pokemon> = mapToPokemonList(results)
-            _callback.success(pokemonList)
+            callback.success(pokemonList)
         }
 
         Log.d("RETROFIT", "${response.code()}: ${response.body()}")
     }
 
     override fun onFailure(call: Call<PokemonListResponse>, throwable: Throwable) {
-        _callback.error()
+        callback.error()
         Log.e("RETROFIT", "Error: ${throwable.message}")
     }
 

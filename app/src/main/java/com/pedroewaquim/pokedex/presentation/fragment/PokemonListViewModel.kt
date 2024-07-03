@@ -10,32 +10,32 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
 class PokemonListViewModel(
-    val getPokemonListAction: GetPokemonList
+    private val getPokemonListAction: GetPokemonList
 ) : ViewModel(), PokemonListCallback {
 
     private val _pokedexState = MutableStateFlow<PokedexState>(PokedexState.Success(emptyList()))
     val pokedexState: StateFlow<PokedexState> = _pokedexState.asStateFlow()
 
-    private val _pokemonList: MutableList<Pokemon> = mutableListOf()
-    private var _alreadyRequested = false
+    private val pokemonList: MutableList<Pokemon> = mutableListOf()
+    private var alreadyRequested = false
 
     fun getMorePokemonsIfNeeded(lastItemPos: Int = -1) {
         if (shouldRequestMorePokemons(lastItemPos)) {
-            _alreadyRequested = true
-            getPokemonListAction(this@PokemonListViewModel, offset = _pokemonList.size)
+            alreadyRequested = true
+            getPokemonListAction(this@PokemonListViewModel, offset = pokemonList.size)
         }
     }
 
     private fun shouldRequestMorePokemons(lastItemPos: Int): Boolean =
-        _pokemonList.size - 3 <= lastItemPos + 1 && !_alreadyRequested
+        pokemonList.size - 3 <= lastItemPos + 1 && !alreadyRequested
 
     override fun success(values: List<Pokemon>) {
-        _alreadyRequested = false
-        _pokemonList.addAll(values)
-        _pokedexState.value = PokedexState.Success(_pokemonList.toList())
+        alreadyRequested = false
+        pokemonList.addAll(values)
+        _pokedexState.value = PokedexState.Success(pokemonList.toList())
     }
 
     override fun error() {
-        _alreadyRequested = false
+        alreadyRequested = false
     }
 }

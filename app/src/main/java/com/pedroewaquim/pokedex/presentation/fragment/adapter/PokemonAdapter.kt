@@ -28,7 +28,7 @@ class PokemonAdapter(
 
     override fun onBindViewHolder(holder: PokemonViewHolder, position: Int) {
         val pokemon = pokemonList[position]
-        holder.number.text = pokemon.id.toString()
+        holder.number.text = pokemon.id
         holder.name.text = pokemon.name
         bindImage(holder, pokemon)
     }
