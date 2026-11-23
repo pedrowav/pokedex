@@ -1,4 +1,4 @@
-package com.pedroewaquim.pokedex.presentation.fragment
+package com.pedroewaquim.pokedex.presentation.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider

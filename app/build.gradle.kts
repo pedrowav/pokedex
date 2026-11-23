@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
+    alias(libs.plugins.compose.compiler)
 }
 
 android {
@@ -34,7 +35,7 @@ android {
         jvmTarget = "1.8"
     }
     buildFeatures {
-        viewBinding = true
+        compose = true
     }
 }
 
@@ -43,16 +44,27 @@ dependencies {
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
     implementation(libs.androidx.activity)
-    implementation(libs.androidx.fragment.ktx)
-    implementation(libs.androidx.constraintlayout)
-    implementation(libs.androidx.legacy.support.v4)
-    implementation(libs.androidx.recyclerview)
     implementation(libs.androidx.lifecycle.viewmodel.ktx)
-    implementation(libs.glide)
     implementation(libs.retrofit)
     implementation(libs.converter.gson)
     implementation(libs.gson)
 
+    val composeBom = platform(libs.androidx.compose.bom)
+    implementation(composeBom)
+    androidTestImplementation(composeBom)
+
+    implementation(libs.androidx.compose.ui)
+    implementation(libs.androidx.compose.ui.graphics)
+    implementation(libs.androidx.compose.ui.tooling.preview)
+    implementation(libs.androidx.compose.material3)
+    implementation(libs.androidx.activity.compose)
+    implementation(libs.androidx.lifecycle.viewmodel.compose)
+    implementation(libs.androidx.lifecycle.runtime.compose)
+    implementation(libs.coil.compose)
+
+    debugImplementation(libs.androidx.compose.ui.tooling)
+    debugImplementation(libs.androidx.compose.ui.test.manifest)
+    androidTestImplementation(libs.androidx.compose.ui.test.junit4)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

@@ -1,28 +1,30 @@
 package com.pedroewaquim.pokedex.presentation
 
 import android.os.Bundle
+import androidx.activity.ComponentActivity
+import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
-import com.pedroewaquim.pokedex.R
-import com.pedroewaquim.pokedex.presentation.fragment.PokemonListFragment
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Scaffold
+import androidx.compose.ui.Modifier
+import com.pedroewaquim.pokedex.presentation.screen.PokemonListScreen
+import com.pedroewaquim.pokedex.presentation.theme.PokedexTheme
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-        setContentView(R.layout.activity_main)
 
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
-            insets
+        setContent {
+            PokedexTheme {
+                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
+                    PokemonListScreen(
+                        modifier = Modifier.padding(innerPadding),
+                    )
+                }
+            }
         }
-
-        val fragment = PokemonListFragment.newInstance()
-        supportFragmentManager.beginTransaction().replace(R.id.fragment_container, fragment)
-            .commit()
     }
 }

@@ -1,7 +1,7 @@
 package com.pedroewaquim.pokedex.infrastructure.factory
 
 import com.pedroewaquim.pokedex.core.action.GetPokemonList
-import com.pedroewaquim.pokedex.presentation.fragment.PokemonListViewModelFactory
+import com.pedroewaquim.pokedex.presentation.viewmodel.PokemonListViewModelFactory
 
 object ViewModelsFactory {
     val pokemonListViewModelFactory by lazy {

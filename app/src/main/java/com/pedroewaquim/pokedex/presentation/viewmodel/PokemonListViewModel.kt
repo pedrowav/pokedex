@@ -1,4 +1,4 @@
-package com.pedroewaquim.pokedex.presentation.fragment
+package com.pedroewaquim.pokedex.presentation.viewmodel
 
 import androidx.lifecycle.ViewModel
 import com.pedroewaquim.pokedex.core.action.GetPokemonList
@@ -19,14 +19,14 @@ class PokemonListViewModel(
     private val pokemonList: MutableList<Pokemon> = mutableListOf()
     private var alreadyRequested = false
 
-    fun getMorePokemonsIfNeeded(lastItemPos: Int = -1) {
-        if (shouldRequestMorePokemons(lastItemPos)) {
+    fun getMorePokemonIfNeeded(lastItemPos: Int = -1) {
+        if (shouldRequestMorePokemon(lastItemPos)) {
             alreadyRequested = true
             getPokemonListAction(this@PokemonListViewModel, offset = pokemonList.size)
         }
     }
 
-    private fun shouldRequestMorePokemons(lastItemPos: Int): Boolean =
+    private fun shouldRequestMorePokemon(lastItemPos: Int): Boolean =
         pokemonList.size - 3 <= lastItemPos + 1 && !alreadyRequested
 
     override fun success(values: List<Pokemon>) {
