@@ -1,5 +1,6 @@
 package com.pedroewaquim.pokedex.presentation.component
 
+import android.content.res.Configuration
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -61,6 +62,7 @@ fun PokemonItem(
             )
             Text(
                 text = pokemon.id,
+                color = MaterialTheme.colorScheme.onSurface,
                 fontSize = 30.sp,
                 style = MaterialTheme.typography.bodyLarge,
                 modifier = Modifier.align(Alignment.TopStart),
@@ -69,6 +71,7 @@ fun PokemonItem(
 
         Text(
             text = pokemon.name,
+            color = MaterialTheme.colorScheme.onSurface,
             fontSize = 30.sp,
             textAlign = TextAlign.Center,
             style = MaterialTheme.typography.bodyLarge,
@@ -81,7 +84,25 @@ fun PokemonItem(
 
 @Preview(showBackground = true)
 @Composable
-fun PokemonItemPreview() {
+fun PokemonItemLightPreview() {
+    PokedexTheme {
+        PokemonItem(
+            pokemon = Pokemon(
+                id = "25",
+                name = "Pikachu",
+                imageUrl = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/25.png",
+            ),
+        )
+    }
+}
+
+@Preview(
+    name = "Dark Mode",
+    showBackground = true,
+    uiMode = Configuration.UI_MODE_NIGHT_YES
+)
+@Composable
+fun PokemonItemDarkPreview() {
     PokedexTheme {
         PokemonItem(
             pokemon = Pokemon(
