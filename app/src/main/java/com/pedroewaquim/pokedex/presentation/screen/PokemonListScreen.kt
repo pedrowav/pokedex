@@ -14,9 +14,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.pedroewaquim.pokedex.core.domain.Pokemon
-import com.pedroewaquim.pokedex.infrastructure.factory.ViewModelsFactory
 import com.pedroewaquim.pokedex.presentation.PokedexState
 import com.pedroewaquim.pokedex.presentation.component.PokemonItem
 import com.pedroewaquim.pokedex.presentation.theme.PokedexTheme
@@ -28,9 +27,7 @@ import com.pedroewaquim.pokedex.presentation.viewmodel.PokemonListViewModel
 @Composable
 fun PokemonListScreen(
     modifier: Modifier = Modifier,
-    viewModel: PokemonListViewModel = viewModel(
-        factory = ViewModelsFactory.pokemonListViewModelFactory,
-    ),
+    viewModel: PokemonListViewModel = hiltViewModel(),
 ) {
     val pokedexState by viewModel.pokedexState.collectAsStateWithLifecycle()
 

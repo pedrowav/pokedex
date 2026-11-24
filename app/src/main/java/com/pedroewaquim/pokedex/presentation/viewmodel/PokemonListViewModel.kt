@@ -5,11 +5,14 @@ import com.pedroewaquim.pokedex.core.action.GetPokemonList
 import com.pedroewaquim.pokedex.core.callback.PokemonListCallback
 import com.pedroewaquim.pokedex.core.domain.Pokemon
 import com.pedroewaquim.pokedex.presentation.PokedexState
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import javax.inject.Inject
 
-class PokemonListViewModel(
+@HiltViewModel
+class PokemonListViewModel @Inject constructor(
     private val getPokemonListAction: GetPokemonList
 ) : ViewModel(), PokemonListCallback {
 
