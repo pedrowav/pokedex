@@ -67,7 +67,7 @@ com.pedroewaquim.pokedex
 
 1. **Clonar el repositorio**:
    ```bash
-   git clone https://github.com/tu-usuario/pokedex.git
+   git clone https://github.com/pedrowav/pokedex.git
    cd pokedex
    ```
 
