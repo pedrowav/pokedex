@@ -102,3 +102,7 @@ Esta aplicación utiliza la API pública de **PokéAPI**:
 - Endpoints consumidos:
   - `GET /pokemon?limit={limit}&offset={offset}` - Obtiene el listado de Pokémon paginado.
   - `GET /pokemon/{id}` - Obtiene la información detallada y los sprites de un Pokémon.
+
+## ScreenShots
+![Listado principal - Modo claro](docs/screenshots/light-mode.png)
+![Listado principal - Modo oscuro](docs/screenshots/dark-mode.png)
